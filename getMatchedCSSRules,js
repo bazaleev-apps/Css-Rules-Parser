@@ -1,0 +1,30 @@
+function getMatchedCSSRules(elements){
+  let re = /:(active|hover|visited|link)/g;
+
+  let rules = [...document.styleSheets]
+  rules = rules.map((sheet) => [...(sheet.cssRules || sheet.rules || [])].map((rule) => {
+    if (rule instanceof CSSStyleRule) {
+      return [rule]
+    } else if (rule instanceof CSSMediaRule || rule instanceof  CSSKeyframesRule ) {
+      return [...rule.cssRules]
+    }
+    return []
+  }))
+  rules = rules.reduce((acc, rules) => acc.concat(...rules), [])
+  rules = rules.filter((rule) => {
+  		let result = [];
+
+      if (rule.parentRule && rule.parentRule.constructor.name == "CSSKeyframesRule") return true;
+
+
+  		try {
+	  		result = elements.filter(el=>el.matches(rule.selectorText.replace(re,"") ))
+  		}
+  		catch (e) {
+	  		result = elements.filter(el=>el.matches(rule.selectorText ))
+  		}
+
+      return result.length>0} );
+  rules = rules.map(({ style }) => style);
+  return rules
+}
