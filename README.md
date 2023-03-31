@@ -1,5 +1,5 @@
 # Css-Rules-Parser
-Get all used css rules of HTML elements
+Get all used css rules of selected HTML elements
 
 ```javascript
 function onlyUnique(value, index, self) {
